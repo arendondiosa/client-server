@@ -12,9 +12,9 @@ int main() {
 	socket s(ctx, socket_type::req);
 
 	cout << "Connecting to tcp port 5555\n";
-	// s.connect("tcp://localhost:5555");
+	s.connect("tcp://localhost:5555");
 	// Server different to localhost
-	s.connect("tcp://192.168.8.66:5555"); //Gustavo's PC
+	// s.connect("tcp://192.168.8.66:5555"); //Gustavo's PC
 
 	cout << "Sending a hello message!\n";
 	message m;

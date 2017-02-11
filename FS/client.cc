@@ -12,8 +12,9 @@ int main() {
 	cout << "Sending a hello message!\n";
 	string test = getFile("sirius.png");
 	message m;
-	// m << "Hello world server!!";
-	m << test;
+
+	if (checkFileExist(test)) m << test;
+	else m << "NO";
 
 	s.send(m);
 

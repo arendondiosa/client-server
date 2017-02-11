@@ -21,3 +21,8 @@ void putFile(string file) {
   fout << file;
   fout.close();
 }
+
+bool checkFileExist(string file) {
+  if(file != "") return true;
+  else return false;
+}
