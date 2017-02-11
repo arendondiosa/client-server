@@ -1,4 +1,7 @@
 #include "fs.h"
+#include "json.hpp"
+
+using json = nlohmann::json;
 
 int main() {
 	cout << "This is the server\n";
@@ -17,7 +20,10 @@ int main() {
 	m >> text;
 
 	if (text == "NO") cout << "No existe el archivo";
-	else putFile(text);
+	else {
+		json file = json::parse(text);
+		putFile(file["file"]);
+	};
 	cout << "Received " << text << endl;
   cout << "Finished\n";
 	return 0;
