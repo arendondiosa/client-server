@@ -1,4 +1,7 @@
 #include "fs.h"
+#include "json.hpp"
+
+using json = nlohmann::json;
 
 int main() {
 	cout << "This is the client\n";
@@ -10,11 +13,18 @@ int main() {
 	s.connect("tcp://localhost:5555");
 
 	cout << "Sending a hello message!\n";
-	string test = getFile("sirius.png");
+	string name = "sirius.png";
+	string test = getFile(name);
 	message m;
+	json file;
 
-	if (checkFileExist(test)) m << test;
-	else m << "NO";
+	if (checkFileExist(test)) {
+		file["user"] = "";
+		file["name"] = name;
+		file["file"] = test;
+		//JSON to string, to tabs
+		m << file.dump(2);
+	} else m << "NO";
 
 	s.send(m);
 

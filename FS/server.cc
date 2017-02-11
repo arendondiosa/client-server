@@ -18,7 +18,7 @@ int main() {
 
 	if (text == "NO") cout << "No existe el archivo";
 	else putFile(text);
-	// cout << "Received " << text << endl;
+	cout << "Received " << text << endl;
   cout << "Finished\n";
 	return 0;
 }
