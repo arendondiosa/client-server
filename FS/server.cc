@@ -22,9 +22,9 @@ int main() {
 	if (text == "NO") cout << "No existe el archivo";
 	else {
 		json file = json::parse(text);
-		putFile(file["file"]);
+		putFile(hex_to_string(file["file"]), file["name"]);
 	};
-	cout << "Received " << text << endl;
+	// cout << "Received " << text << endl;
   cout << "Finished\n";
 	return 0;
 }

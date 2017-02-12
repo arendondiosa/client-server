@@ -13,7 +13,7 @@ int main() {
 	s.connect("tcp://localhost:5555");
 
 	cout << "Sending a hello message!\n";
-	string name = "sirius.png";
+	string name = "Do_I_Wanna_Know.mp4";
 	string test = getFile(name);
 	message m;
 	json file;
@@ -21,7 +21,7 @@ int main() {
 	if (checkFileExist(test)) {
 		file["user"] = "";
 		file["name"] = name;
-		file["file"] = test;
+		file["file"] = string_to_hex(test);
 		//JSON to string, to tabs
 		m << file.dump(2);
 	} else m << "NO";
