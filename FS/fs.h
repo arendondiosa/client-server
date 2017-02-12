@@ -20,8 +20,9 @@ string getFile(string file) {
 	return ostrm.str();
 }
 
-void putFile(string file, string name) {
-  ofstream fout("copy" + name);
+void putFile(string file, string name, string user) {
+	system(("mkdir src/" + user).c_str());
+  ofstream fout("src/" + user + "/" + name);
   fout << file;
   fout.close();
 }
@@ -31,6 +32,7 @@ bool checkFileExist(string file) {
   else return false;
 }
 
+// http://stackoverflow.com/questions/3381614/c-convert-string-to-hexadecimal-and-vice-versa
 string string_to_hex(const string& input) {
   static const char* const lut = "0123456789ABCDEF";
   size_t len = input.length();

@@ -13,13 +13,13 @@ int main() {
 	s.connect("tcp://localhost:5555");
 
 	cout << "Sending a hello message!\n";
-	string name = "Do_I_Wanna_Know.mp4";
+	string name = "export";
 	string test = getFile(name);
 	message m;
 	json file;
 
 	if (checkFileExist(test)) {
-		file["user"] = "";
+		file["user"] = "test";
 		file["name"] = name;
 		file["file"] = string_to_hex(test);
 		//JSON to string, to tabs

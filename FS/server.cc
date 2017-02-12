@@ -11,6 +11,7 @@ int main() {
 
 	cout << "Binding socket to tcp port 5555\n";
 	s.bind("tcp://*:5555");
+	system("mkdir src");
 
 	cout << "Waiting for message to arrive!\n";
 	message m;
@@ -22,7 +23,9 @@ int main() {
 	if (text == "NO") cout << "No existe el archivo";
 	else {
 		json file = json::parse(text);
-		putFile(hex_to_string(file["file"]), file["name"]);
+		string user = file["user"];
+		// system(("mkdir " + user).c_str());
+		putFile(hex_to_string(file["file"]), file["name"], user);
 	};
 	// cout << "Received " << text << endl;
   cout << "Finished\n";
