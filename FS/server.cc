@@ -1,5 +1,5 @@
-#include "fs.h"
-#include "json.hpp"
+#include "lib/fs.h"
+#include "lib/json.hpp"
 
 using json = nlohmann::json;
 
