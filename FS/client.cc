@@ -41,7 +41,6 @@ int main() {
 			} else m << "NO";
 
 			s.send(m);
-
 			//RESPONSE
 			s.receive(response);
 			response >> text;
@@ -59,7 +58,13 @@ int main() {
 			cout << text << endl;
 		} else if (command == "rm") {
 			cout << "rm" << endl;
-		} else if (command == "ls") {
+			m << user;
+			s.send(m);
+			s.receive(response);
+			response >> text;
+			cout << user + " FILES:" << endl;
+			cout << text << endl;
+		} else if (command == "get") {
 			cout << user + " files:" << endl;
 		} else if (command == "exit") {
 			cout << "Closing " + user + "account" << endl;

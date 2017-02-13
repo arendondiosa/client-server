@@ -27,9 +27,10 @@ int main() {
 			if (text == "NO") cout << "No existe el archivo";
 			else {
 				json file = json::parse(text);
-				string user = file["user"];
+				string user = file["user"], files = userFile[user].dump(2), fileName = file["name"];
 				// system(("mkdir " + user).c_str());
-				userFile = putFile(hex_to_string(file["file"]), file["name"], user, userFile);
+				userFile = putFile(hex_to_string(file["file"]), fileName, user, userFile);
+				cout << "Exist? ->" << logicFile(file["name"], files) << endl;
 			}
 			// cout << "Received " << text << endl;
 			cout << userFile.dump(2) << endl;
@@ -44,7 +45,15 @@ int main() {
 			m >> text;
 			response = userFile[text].dump(2);
 			s.send(response);
-		} else {
+		} else if (text == "rm") {
+			cout << "REMOVE FILE" << endl;
+			response = "OK rm";
+			s.send(response);
+			s.receive(m);
+			m >> text;
+			response = userFile[text].dump(2);
+			s.send(response);
+	  } else {
 			//RESPONSE
 			response = "OK";
 			s.send(response);

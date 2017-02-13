@@ -29,13 +29,15 @@ bool checkFileExist(string file) {
   else return false;
 }
 
-// bool logicFile(string name, vector<string> &files) {
-// 	for (int i = 0; i < files.size(); i++) {
-// 		if (files[i] == name)
-// 			return true;
-// 	}
-// 	return false;
-// }
+bool logicFile(string fileName, string files) {
+	// cout << files << endl;
+	json list = json::parse(files);
+	for (auto& element : list) {
+		if (element == fileName)
+			return true;
+	}
+	return false;
+}
 
 json putFile(string file, string name, string user, json userFile) {
 	system(("mkdir files/" + user).c_str());
