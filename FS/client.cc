@@ -12,22 +12,47 @@ int main() {
 	cout << "Connecting to tcp port 5555\n";
 	s.connect("tcp://localhost:5555");
 
-	cout << "Sending a hello message!\n";
-	string name = "export";
-	string test = getFile(name);
-	message m;
-	json file;
+	string name;
+	string user;
+	string command;
 
-	if (checkFileExist(test)) {
-		file["user"] = "test";
-		file["name"] = name;
-		file["file"] = string_to_hex(test);
-		//JSON to string, to tabs
-		m << file.dump(2);
-	} else m << "NO";
+	cout << "Enter the username:  ";
+	cin >> user;
+	cout << "WELCOME " + user << endl;
+	cout << "Enter a comand" << endl;
 
-	s.send(m);
+	while (true) {
+		cout << ">> $  ";
+		cin >> command;
 
-	cout << "Finished\n";
+		if (command == "add") {
+			cin >> name;
+			string test = getFile(name);
+			message m;
+			json file;
+
+			if (checkFileExist(test)) {
+				file["user"] = user;
+				file["name"] = name;
+				file["file"] = string_to_hex(test);
+				//JSON to string, to tabs
+				m << file.dump(2);
+			} else m << "NO";
+
+			s.send(m);
+
+			//RESPONSE
+			message response;
+			s.receive(response);
+			cout << "Finished\n";
+		}
+		else if (command == "ls") {
+			cout << user + " files:" << endl;
+		}
+		else if (command == "exit") break;
+		else cout << "Enter a correct command" << endl;
+
+
+	}
 	return 0;
 }

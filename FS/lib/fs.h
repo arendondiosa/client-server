@@ -2,10 +2,14 @@
 #include <string>
 #include <fstream>
 #include <sstream>
+#include <vector>
 #include <zmqpp/zmqpp.hpp>
 // toHex
 #include <algorithm>
 #include <stdexcept>
+#include "json.hpp"
+
+using json = nlohmann::json;
 
 
 using namespace std;
@@ -20,18 +24,36 @@ string getFile(string file) {
 	return ostrm.str();
 }
 
-void putFile(string file, string name, string user) {
-	system(("mkdir src/" + user).c_str());
-  ofstream fout("src/" + user + "/" + name);
-  fout << file;
-  fout.close();
-}
-
 bool checkFileExist(string file) {
   if(file != "") return true;
   else return false;
 }
 
+// bool logicFile(string name, vector<string> &files) {
+// 	for (int i = 0; i < files.size(); i++) {
+// 		if (files[i] == name)
+// 			return true;
+// 	}
+// 	return false;
+// }
+
+json putFile(string file, string name, string user, json userFile) {
+	system(("mkdir src/" + user).c_str());
+	ofstream fout("src/" + user + "/" + name);
+	fout << file;
+	fout.close();
+
+	userFile["user"] = user;
+	// userFile["file"] = {name};
+	// vector<string> files;
+	// if (!logicFile(name, files))
+	cout << userFile["file"] << endl;
+	userFile["file"].push_back(name);
+
+	return userFile;
+}
+
+// Encrypt
 // http://stackoverflow.com/questions/3381614/c-convert-string-to-hexadecimal-and-vice-versa
 string string_to_hex(const string& input) {
   static const char* const lut = "0123456789ABCDEF";
