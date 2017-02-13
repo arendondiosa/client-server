@@ -12,9 +12,7 @@ int main() {
 	cout << "Connecting to tcp port 5555\n";
 	s.connect("tcp://localhost:5555");
 
-	string name;
-	string user;
-	string command;
+	string name, user, command, text;
 
 	cout << "Enter the username:  ";
 	cin >> user;
@@ -27,6 +25,9 @@ int main() {
 		cin >> command;
 
 		if (command == "add") {
+			m << "add";
+			s.send(m);
+			s.receive(response);
 			cin >> name;
 			string test = getFile(name);
 			json file;
@@ -43,19 +44,27 @@ int main() {
 
 			//RESPONSE
 			s.receive(response);
-			cout << "Finished\n";
-		}
-		else if (command == "rm") {
+			response >> text;
+			cout << text << endl;
+		} else if (command == "ls") {
+			m << "ls";
+			s.send(m);
+			s.receive(response);
+			cout << "getting" << endl;
+			m << user;
+			s.send(m);
+			s.receive(response);
+			response >> text;
+			cout << user + " FILES:" << endl;
+			cout << text << endl;
+		} else if (command == "rm") {
 			cout << "rm" << endl;
-		}
-		else if (command == "ls") {
+		} else if (command == "ls") {
 			cout << user + " files:" << endl;
-		}
-		else if (command == "exit") {
+		} else if (command == "exit") {
 			cout << "Closing " + user + "account" << endl;
 			break;
-		}
-		else cout << "Enter a correct command" << endl;
+		} else cout << "Enter a correct command" << endl;
 	}
 	return 0;
 }

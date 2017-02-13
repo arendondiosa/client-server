@@ -38,17 +38,16 @@ bool checkFileExist(string file) {
 // }
 
 json putFile(string file, string name, string user, json userFile) {
-	system(("mkdir src/" + user).c_str());
-	ofstream fout("src/" + user + "/" + name);
+	system(("mkdir files/" + user).c_str());
+	ofstream fout("files/" + user + "/" + name);
 	fout << file;
 	fout.close();
 
-	userFile["user"] = user;
+	userFile[user].push_back(name);
 	// userFile["file"] = {name};
 	// vector<string> files;
 	// if (!logicFile(name, files))
-	cout << userFile["file"] << endl;
-	userFile["file"].push_back(name);
+	cout << userFile[user] << endl;
 
 	return userFile;
 }

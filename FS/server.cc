@@ -8,31 +8,48 @@ int main() {
 
 	cout << "Binding socket to tcp port 5555\n";
 	s.bind("tcp://*:5555");
-	system("mkdir src");
+	system("mkdir files");
 	json userFile;
+	message m, response;
+	string text;
 
 	while (true) {
 		cout << "Waiting for message to arrive!\n";
-		message m;
 		s.receive(m);
-
-		string text;
 		m >> text;
 
-		if (text == "NO") cout << "No existe el archivo";
-		else {
-			json file = json::parse(text);
-			string user = file["user"];
-			// system(("mkdir " + user).c_str());
-			userFile = putFile(hex_to_string(file["file"]), file["name"], user, userFile);
-		};
-		// cout << "Received " << text << endl;
-		cout << userFile.dump(2) << endl;
+		if (text == "add") {
+			cout << "ADDING FILE" << endl;
+			response = "OK add";
+			s.send(response);
+			s.receive(m);
+			m >> text;
+			if (text == "NO") cout << "No existe el archivo";
+			else {
+				json file = json::parse(text);
+				string user = file["user"];
+				// system(("mkdir " + user).c_str());
+				userFile = putFile(hex_to_string(file["file"]), file["name"], user, userFile);
+			}
+			// cout << "Received " << text << endl;
+			cout << userFile.dump(2) << endl;
 
-		//RESPONSE
-		message response = "OK";
-		s.send(response);
-		cout << "Finished\n";
+			response = "ADDED FILE";
+			s.send(response);
+		} else if (text == "ls") {
+			cout << "GET FILES" << endl;
+			response = "OK ls";
+			s.send(response);
+			s.receive(m);
+			m >> text;
+			response = userFile[text].dump(2);
+			s.send(response);
+		} else {
+			//RESPONSE
+			response = "OK";
+			s.send(response);
+			cout << "Finished\n";
+		}
 	}
 	return 0;
 }
