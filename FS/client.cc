@@ -20,6 +20,7 @@ int main() {
 	cin >> user;
 	cout << "WELCOME " + user << endl;
 	cout << "Enter a comand" << endl;
+	message m, response;
 
 	while (true) {
 		cout << ">> $  ";
@@ -28,7 +29,6 @@ int main() {
 		if (command == "add") {
 			cin >> name;
 			string test = getFile(name);
-			message m;
 			json file;
 
 			if (checkFileExist(test)) {
@@ -42,17 +42,20 @@ int main() {
 			s.send(m);
 
 			//RESPONSE
-			message response;
 			s.receive(response);
 			cout << "Finished\n";
+		}
+		else if (command == "rm") {
+			cout << "rm" << endl;
 		}
 		else if (command == "ls") {
 			cout << user + " files:" << endl;
 		}
-		else if (command == "exit") break;
+		else if (command == "exit") {
+			cout << "Closing " + user + "account" << endl;
+			break;
+		}
 		else cout << "Enter a correct command" << endl;
-
-
 	}
 	return 0;
 }

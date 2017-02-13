@@ -33,6 +33,6 @@ int main() {
 		message response = "OK";
 		s.send(response);
 		cout << "Finished\n";
-}
+	}
 	return 0;
 }
