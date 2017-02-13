@@ -1,4 +1,5 @@
-CC	= g++ -std=c++11 -Wall -L/home/arendon/zmq/lib  -I/home/arendon/zmq/include
+# CC	= g++ -std=c++11 -Wall -L/home/arendon/zmq/lib  -I/home/arendon/zmq/include
+CC	= g++ -std=c++11 -Wall -L/home/utp/zmq/lib  -I/home/utp/zmq/include
 LDFLAGS = -lpthread -lzmqpp -lzmq
 
 all: server client
