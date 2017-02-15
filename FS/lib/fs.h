@@ -24,13 +24,21 @@ string getFile(string file) {
 	return ostrm.str();
 }
 
+string getFileServer(string user, string file) {
+	stringstream ostrm;
+
+	ifstream fin(user + "/" + file, ios::binary);
+	ostrm << fin.rdbuf();
+  fin.close();
+	return ostrm.str();
+}
+
 bool checkFileExist(string file) {
   if(file != "") return true;
   else return false;
 }
 
 bool logicFile(string fileName, string files) {
-	// cout << files << endl;
 	json list = json::parse(files);
 	for (auto& element : list) {
 		if (element == fileName)
@@ -39,19 +47,37 @@ bool logicFile(string fileName, string files) {
 	return false;
 }
 
-json putFile(string file, string name, string user, json userFile) {
+json putFile(string file, string name, string user, json userFile, string files) {
 	system(("mkdir files/" + user).c_str());
 	ofstream fout("files/" + user + "/" + name);
 	fout << file;
 	fout.close();
 
-	userFile[user].push_back(name);
+	if (!logicFile(name, files))
+		userFile[user].push_back(name);
 	// userFile["file"] = {name};
 	// vector<string> files;
 	// if (!logicFile(name, files))
 	cout << userFile[user] << endl;
 
 	return userFile;
+}
+
+// string loadDB() {
+// 	stringstream DB;
+// 	ifstream DBtoLoad;
+// 	DBtoLoad.open("DB.abc");
+// 	DBtoLoad >> DB;
+// 	DBtoLoad.close();
+//
+// 	return DB.c_str();
+// }
+
+void saveDB(string DBtoSave) {
+	ofstream DB;
+	DB.open("DB.abc");
+	DB << DBtoSave;
+	DB.close();
 }
 
 // Encrypt
