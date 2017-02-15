@@ -11,6 +11,7 @@ int main() {
 
 	cout << "Connecting to tcp port 5555\n";
 	s.connect("tcp://localhost:5555");
+		system("mkdir downloads");
 
 	string name, user, command, text;
 
@@ -57,8 +58,27 @@ int main() {
 			cout << user + " FILES:" << endl;
 			cout << text << endl;
 		} else if (command == "rm") {
-			cout << "rm" << endl;
+			// cout << "rm" << endl;
+			m << "rm";
+			s.send(m);
+			s.receive(response);
+			response >> text;
+			cout << text << endl;
+			cin >> name;
 
+			json get;
+			get["user"] = user;
+			get["file"] = name;
+			m << get.dump(2);
+			s.send(m);
+			s.receive(response);
+			response >> text;
+			// cout << text << endl;
+			if (text == "NO FILE")
+				cout << "File no found in server !!!" << endl;
+			else {
+				cout << name << " was delete from server" << endl;
+			}
 		} else if (command == "get") {
 			m << "get";
 			s.send(m);
@@ -80,12 +100,12 @@ int main() {
 			else {
 				putFileClient(name, text);
 			}
-
 			// cout << user + " files:" << endl;
 		} else if (command == "exit") {
 			cout << "Closing " + user + " account" << endl;
 			break;
 		} else cout << "Enter a correct command" << endl;
 	}
+	// system("rm -r downloads/");
 	return 0;
 }

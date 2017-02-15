@@ -9,7 +9,6 @@ int main() {
 	cout << "Binding socket to tcp port 5555\n";
 	s.bind("tcp://*:5555");
 	system("mkdir files");
-	system("mkdir downloads");
 	// json userFile = json::parse(loadDB());
 	json userFile;
 	message m, response;
@@ -48,7 +47,22 @@ int main() {
 			response = userFile[text].dump(2);
 			s.send(response);
 		} else if (text == "rm") {
+			cout << "DELETE FILE" << endl;
+			response = "DELETE FILE";
+			s.send(response);
+			s.receive(m);
+			m >> text;
+			cout << text << endl;
+			json get = json::parse(text);
+			string user = get["user"], files = userFile[user].dump(2), fileName = get["file"];
 
+			if (logicFile(fileName, files)) {
+				userFile = deleteUserFile(user, fileName, userFile);
+				response = "YES";
+			}
+			else
+				response = "NO FILE";
+			s.send(response);
 	  } else if (text == "get") {
 			cout << "GETTING FILE" << endl;
 			response = "GETTING FILE";

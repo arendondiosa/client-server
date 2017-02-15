@@ -56,6 +56,22 @@ bool logicFile(string fileName, string files) {
 	return false;
 }
 
+json deleteUserFile(string user, string fileName, json files) {
+	system(("rm files/" + user + "/" + fileName).c_str());
+
+	json aux;
+	aux[user] = files[user];
+	files[user] = {};
+
+	for (auto& element : aux[user]) {
+		if (element != fileName) {
+			cout << element << endl;
+			files[user].push_back(element);
+		}
+	}
+	return files;
+}
+
 json putFile(string file, string name, string user, json userFile, string files) {
 	system(("mkdir files/" + user).c_str());
 	ofstream fout("files/" + user + "/" + name);
