@@ -16,30 +16,30 @@ using namespace std;
 using namespace zmqpp;
 
 string getFile(string file) {
-	stringstream ostrm;
+  stringstream ostrm;
 
-	ifstream fin(file, ios::binary);
-	ostrm << fin.rdbuf();
+  ifstream fin(file, ios::binary);
+  ostrm << fin.rdbuf();
   fin.close();
-	return ostrm.str();
+  return ostrm.str();
 }
 
 string getFileServer(string user, string file) {
-	stringstream ostrm;
+  stringstream ostrm;
 
-	ifstream fin(user + "/" + file, ios::binary);
-	ostrm << fin.rdbuf();
+  ifstream fin(user + "/" + file, ios::binary);
+  ostrm << fin.rdbuf();
   fin.close();
-	return ostrm.str();
+  return ostrm.str();
 }
 
 string getUserfile(string user, string file) {
-	stringstream ostrm;
+  stringstream ostrm;
 
-	ifstream fin("files/" + user + "/" + file, ios::binary);
-	ostrm << fin.rdbuf();
+  ifstream fin("files/" + user + "/" + file, ios::binary);
+  ostrm << fin.rdbuf();
   fin.close();
-	return ostrm.str();
+  return ostrm.str();
 }
 
 bool checkFileExist(string file) {
@@ -48,67 +48,67 @@ bool checkFileExist(string file) {
 }
 
 bool logicFile(string fileName, string files) {
-	json list = json::parse(files);
-	for (auto& element : list) {
-		if (element == fileName)
-			return true;
-	}
-	return false;
+  json list = json::parse(files);
+  for (auto& element : list) {
+    if (element == fileName)
+      return true;
+  }
+  return false;
 }
 
 json deleteUserFile(string user, string fileName, json files) {
-	system(("rm files/" + user + "/" + fileName).c_str());
+  system(("rm files/" + user + "/" + fileName).c_str());
 
-	json aux;
-	aux[user] = files[user];
-	files[user] = {};
+  json aux;
+  aux[user] = files[user];
+  files[user] = {};
 
-	for (auto& element : aux[user]) {
-		if (element != fileName) {
-			cout << element << endl;
-			files[user].push_back(element);
-		}
-	}
-	return files;
+  for (auto& element : aux[user]) {
+    if (element != fileName) {
+      cout << element << endl;
+      files[user].push_back(element);
+    }
+  }
+  return files;
 }
 
 json putFile(string file, string name, string user, json userFile, string files) {
-	system(("mkdir files/" + user).c_str());
-	ofstream fout("files/" + user + "/" + name);
-	fout << file;
-	fout.close();
+  system(("mkdir files/" + user).c_str());
+  ofstream fout("files/" + user + "/" + name);
+  fout << file;
+  fout.close();
 
-	if (!logicFile(name, files))
-		userFile[user].push_back(name);
-	// userFile["file"] = {name};
-	// vector<string> files;
-	// if (!logicFile(name, files))
-	cout << userFile[user] << endl;
+  if (!logicFile(name, files))
+    userFile[user].push_back(name);
+  // userFile["file"] = {name};
+  // vector<string> files;
+  // if (!logicFile(name, files))
+  cout << userFile[user] << endl;
 
-	return userFile;
+  return userFile;
 }
 
 void putFileClient(string name, string file) {
-	ofstream fout("downloads/" + name);
-	fout << file;
-	fout.close();
+  ofstream fout("downloads/" + name);
+  fout << file;
+  fout.close();
 }
 
 // string loadDB() {
-// 	stringstream DB;
-// 	ifstream DBtoLoad;
-// 	DBtoLoad.open("DB.abc");
-// 	DBtoLoad >> DB;
-// 	DBtoLoad.close();
+//   stringstream DB;
+//   ifstream DBtoLoad;
+//   DBtoLoad.open("DB.abc");
+//   DBtoLoad >> DB;
+//   DBtoLoad.close();
 //
-// 	return DB.c_str();
+//   return DB.c_str();
 // }
 
 void saveDB(string DBtoSave) {
-	ofstream DB;
-	DB.open("DB.abc");
-	DB << DBtoSave;
-	DB.close();
+  ofstream DB;
+  DB.open("DB.abc");
+  DB << DBtoSave;
+  DB.close();
 }
 
 // Encrypt
