@@ -9,6 +9,7 @@ int main() {
 	cout << "Binding socket to tcp port 5555\n";
 	s.bind("tcp://*:5555");
 	system("mkdir files");
+	system("mkdir downloads");
 	// json userFile = json::parse(loadDB());
 	json userFile;
 	message m, response;
@@ -59,9 +60,9 @@ int main() {
 			string user = get["user"], files = userFile[user].dump(2), fileName = get["file"];
 
 			if (logicFile(fileName, files))
-				response = "EXIST";
+				response = getUserfile(user, fileName);
 			else
-				response = "SEE FILE";
+				response = "NO FILE";
 			s.send(response);
 		} else {
 			//RESPONSE

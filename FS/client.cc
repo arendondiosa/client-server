@@ -74,7 +74,12 @@ int main() {
 			s.send(m);
 			s.receive(response);
 			response >> text;
-			cout << text << endl;
+			// cout << text << endl;
+			if (text == "NO FILE")
+				cout << "File no found in server !!!" << endl;
+			else {
+				putFileClient(name, text);
+			}
 
 			// cout << user + " files:" << endl;
 		} else if (command == "exit") {

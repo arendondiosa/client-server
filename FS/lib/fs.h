@@ -33,6 +33,15 @@ string getFileServer(string user, string file) {
 	return ostrm.str();
 }
 
+string getUserfile(string user, string file) {
+	stringstream ostrm;
+
+	ifstream fin("files/" + user + "/" + file, ios::binary);
+	ostrm << fin.rdbuf();
+  fin.close();
+	return ostrm.str();
+}
+
 bool checkFileExist(string file) {
   if(file != "") return true;
   else return false;
@@ -61,6 +70,12 @@ json putFile(string file, string name, string user, json userFile, string files)
 	cout << userFile[user] << endl;
 
 	return userFile;
+}
+
+void putFileClient(string name, string file) {
+	ofstream fout("downloads/" + name);
+	fout << file;
+	fout.close();
 }
 
 // string loadDB() {
