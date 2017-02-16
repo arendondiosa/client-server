@@ -54,12 +54,12 @@ Close the user session and the connection with the server.
 
 ## Dependencies
 
-### ZMQ
+### [ZMQ](https://github.com/zeromq/zmqpp)
 
-### json
-
-###
+### [JSON](https://github.com/nlohmann/json)
 
 _Notes:_
 
-_* a_
+_* This version only sends files from the folder where the client.out is located._
+
+_* Please report bugs in [![Github Issues](https://img.shields.io/github/issues/aerendon/client-server.svg)](http://github.com/aerendon/client-server/issues)_ 
