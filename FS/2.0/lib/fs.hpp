@@ -15,13 +15,35 @@ using json = nlohmann::json;
 using namespace std;
 using namespace zmqpp;
 
-string getFile(string file) {
+string getFile(string fileName) {
   stringstream ostrm;
 
-  ifstream fin(file, ios::binary);
+  ifstream fin(fileName, ios::binary);
   ostrm << fin.rdbuf();
   fin.close();
-  return ostrm.str();
+
+  FILE *file = NULL;
+  unsigned char buffer[100];  // array of bytes, not pointers-to-bytes
+  size_t bytesRead = 0;
+
+  file = fopen(fileName.c_str(), "rb");
+
+  if (file != NULL) {
+    // read up to sizeof(buffer) bytes
+    while ((bytesRead = fread(buffer, 1, sizeof(buffer), file)) > 0) {
+      cout << "-----------------Chunk" << endl;
+      cout << buffer << endl;
+      // cout << bytesRead << endl;
+      // cout << string (buffer, bytesRead) << endl;
+    }
+  }
+
+  cout << endl;
+  cout << "-----------------FILE" << endl;
+  cout << ostrm.str() << endl;
+  // return ostrm.str();
+  string st(buffer);
+  return st;
 }
 
 string getFileServer(string user, string file) {

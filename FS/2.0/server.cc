@@ -1,4 +1,4 @@
-#include "lib/fs.h"
+#include "lib/fs.hpp"
 
 int main() {
   cout << "This is the server\n";
@@ -29,11 +29,8 @@ int main() {
       else {
         json file = json::parse(text);
         string user = file["user"], files = userFile[user].dump(2), fileName = file["name"];
-        // system(("mkdir " + user).c_str());
         userFile = putFile(hex_to_string(file["file"]), fileName, user, userFile, files);
-        // cout << "Exist? ->" << logicFile(file["name"], files) << endl;
       }
-      // cout << "Received " << text << endl;
       cout << userFile.dump(2) << endl;
 
       response = "ADDED FILE";

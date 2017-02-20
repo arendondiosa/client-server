@@ -1,4 +1,4 @@
-#include "lib/fs.h"
+#include "lib/fs.hpp"
 #include "lib/json.hpp"
 
 using json = nlohmann::json;
@@ -26,26 +26,28 @@ int main() {
     cin >> command;
 
     if (command == "add") {
-      m << "add";
-      s.send(m);
-      s.receive(response);
-      cin >> name;
       string test = getFile(name);
-      json file;
+      while (true) {
+        m << "add";
+        s.send(m);
+        s.receive(response);
+        cin >> name;
+        json file;
 
-      if (checkFileExist(test)) {
-        file["user"] = user;
-        file["name"] = name;
-        file["file"] = string_to_hex(test);
-        //JSON to string, to tabs
-        m << file.dump(2);
-      } else m << "NO";
+        if (checkFileExist(test)) {
+          file["user"] = user;
+          file["name"] = name;
+          file["file"] = string_to_hex(test);
+          //JSON to string, to tabs
+          m << file.dump(2);
+        } else m << "NO";
 
-      s.send(m);
-      //RESPONSE
-      s.receive(response);
-      response >> text;
-      cout << text << endl;
+        s.send(m);
+        //RESPONSE
+        s.receive(response);
+        response >> text;
+        cout << text << endl;
+      }
     } else if (command == "ls") {
       m << "ls";
       s.send(m);
