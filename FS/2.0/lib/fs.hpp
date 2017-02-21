@@ -9,6 +9,8 @@
 #include <stdexcept>
 #include "json.hpp"
 
+#define CHUNK 50
+
 using json = nlohmann::json;
 
 
@@ -23,7 +25,7 @@ string getFile(string fileName) {
   fin.close();
 
   FILE *file = NULL;
-  unsigned char buffer[100];  // array of bytes, not pointers-to-bytes
+  unsigned char buffer[CHUNK];  // array of bytes, not pointers-to-bytes
   size_t bytesRead = 0;
 
   file = fopen(fileName.c_str(), "rb");
@@ -32,7 +34,7 @@ string getFile(string fileName) {
     // read up to sizeof(buffer) bytes
     while ((bytesRead = fread(buffer, 1, sizeof(buffer), file)) > 0) {
       cout << "-----------------Chunk" << endl;
-      cout << buffer << endl;
+      cout << string(buffer, find(buffer, buffer + bytesRead, '\0')) << endl;
       // cout << bytesRead << endl;
       // cout << string (buffer, bytesRead) << endl;
     }
@@ -42,8 +44,7 @@ string getFile(string fileName) {
   cout << "-----------------FILE" << endl;
   cout << ostrm.str() << endl;
   // return ostrm.str();
-  string st(buffer);
-  return st;
+  return ostrm.str();
 }
 
 string getFileServer(string user, string file) {
