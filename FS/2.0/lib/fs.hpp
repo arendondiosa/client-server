@@ -17,12 +17,63 @@ using json = nlohmann::json;
 using namespace std;
 using namespace zmqpp;
 
-string getFile(string fileName) {
-  stringstream ostrm;
+// Encrypt
+// http://stackoverflow.com/questions/3381614/c-convert-string-to-hexadecimal-and-vice-versa
+string string_to_hex(const string& input) {
+  static const char* const lut = "0123456789ABCDEF";
+  size_t len = input.length();
 
-  ifstream fin(fileName, ios::binary);
-  ostrm << fin.rdbuf();
-  fin.close();
+  std::string output;
+  output.reserve(2 * len);
+  for (size_t i = 0; i < len; ++i) {
+    const unsigned char c = input[i];
+    output.push_back(lut[c >> 4]);
+    output.push_back(lut[c & 15]);
+  }
+  return output;
+}
+
+string hex_to_string(const string& input) {
+  static const char* const lut = "0123456789ABCDEF";
+  size_t len = input.length();
+  if (len & 1) throw std::invalid_argument("odd length");
+
+  std::string output;
+  output.reserve(len / 2);
+  for (size_t i = 0; i < len; i += 2) {
+    char a = input[i];
+    const char* p = std::lower_bound(lut, lut + 16, a);
+    if (*p != a) throw std::invalid_argument("not a hex digit");
+
+    char b = input[i + 1];
+    const char* q = std::lower_bound(lut, lut + 16, b);
+    if (*q != b) throw std::invalid_argument("not a hex digit");
+
+    output.push_back(((p - lut) << 4) | (q - lut));
+  }
+  return output;
+}
+
+
+bool checkFileExist(string file) {
+  if(file != "") return true;
+  else return false;
+}
+
+
+void getFile(string user, string fileName) {
+  context ctx;
+  socket s(ctx, socket_type::req);
+  
+  s.connect("tcp://localhost:5555");
+
+  string command, text;
+  message m, response;
+  // stringstream ostrm;
+
+  // ifstream fin(fileName, ios::binary);
+  // ostrm << fin.rdbuf();
+  // fin.close();
 
   FILE *file = NULL;
   unsigned char buffer[CHUNK];  // array of bytes, not pointers-to-bytes
@@ -33,18 +84,33 @@ string getFile(string fileName) {
   if (file != NULL) {
     // read up to sizeof(buffer) bytes
     while ((bytesRead = fread(buffer, 1, sizeof(buffer), file)) > 0) {
-      cout << "-----------------Chunk" << endl;
-      cout << string(buffer, find(buffer, buffer + bytesRead, '\0')) << endl;
-      // cout << bytesRead << endl;
-      // cout << string (buffer, bytesRead) << endl;
+      m << "add";
+      s.send(m);
+      s.receive(response);
+      string test =  string(buffer, find(buffer, buffer + bytesRead, '\0'));
+      cout << bytesRead << endl;
+      json file;
+
+      if (checkFileExist(test)) {
+        file["user"] = user;
+        file["name"] = fileName;
+        file["file"] = string_to_hex(test);
+        //JSON to string, to tabs
+        m << file.dump(2);
+
+        cout << file.dump(2) << endl;
+      } else m << "NO";
+
+      s.send(m);
+      //RESPONSE
+      s.receive(response);
+      response >> text;
+      cout << text << endl;
     }
   }
 
-  cout << endl;
-  cout << "-----------------FILE" << endl;
-  cout << ostrm.str() << endl;
+  // cout << endl;
   // return ostrm.str();
-  return ostrm.str();
 }
 
 string getFileServer(string user, string file) {
@@ -63,11 +129,6 @@ string getUserfile(string user, string file) {
   ostrm << fin.rdbuf();
   fin.close();
   return ostrm.str();
-}
-
-bool checkFileExist(string file) {
-  if(file != "") return true;
-  else return false;
 }
 
 bool logicFile(string fileName, string files) {
@@ -132,41 +193,4 @@ void saveDB(string DBtoSave) {
   DB.open("DB.abc");
   DB << DBtoSave;
   DB.close();
-}
-
-// Encrypt
-// http://stackoverflow.com/questions/3381614/c-convert-string-to-hexadecimal-and-vice-versa
-string string_to_hex(const string& input) {
-  static const char* const lut = "0123456789ABCDEF";
-  size_t len = input.length();
-
-  std::string output;
-  output.reserve(2 * len);
-  for (size_t i = 0; i < len; ++i) {
-    const unsigned char c = input[i];
-    output.push_back(lut[c >> 4]);
-    output.push_back(lut[c & 15]);
-  }
-  return output;
-}
-
-string hex_to_string(const string& input) {
-  static const char* const lut = "0123456789ABCDEF";
-  size_t len = input.length();
-  if (len & 1) throw std::invalid_argument("odd length");
-
-  std::string output;
-  output.reserve(len / 2);
-  for (size_t i = 0; i < len; i += 2) {
-    char a = input[i];
-    const char* p = std::lower_bound(lut, lut + 16, a);
-    if (*p != a) throw std::invalid_argument("not a hex digit");
-
-    char b = input[i + 1];
-    const char* q = std::lower_bound(lut, lut + 16, b);
-    if (*q != b) throw std::invalid_argument("not a hex digit");
-
-    output.push_back(((p - lut) << 4) | (q - lut));
-  }
-  return output;
 }

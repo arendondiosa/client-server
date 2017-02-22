@@ -26,26 +26,27 @@ int main() {
     cin >> command;
 
     if (command == "add") {
-      m << "add";
-      s.send(m);
-      s.receive(response);
       cin >> name;
-      string test = getFile(name);
-      json file;
-
-      if (checkFileExist(test)) {
-        file["user"] = user;
-        file["name"] = name;
-        file["file"] = string_to_hex(test);
-        //JSON to string, to tabs
-        m << file.dump(2);
-      } else m << "NO";
-
-      s.send(m);
-      //RESPONSE
-      s.receive(response);
-      response >> text;
-      cout << text << endl;
+      getFile(user, name);
+      // m << "add";
+      // s.send(m);
+      // s.receive(response);
+      // string test = getFile(name);
+      // json file;
+      //
+      // if (checkFileExist(test)) {
+      //   file["user"] = user;
+      //   file["name"] = name;
+      //   file["file"] = string_to_hex(test);
+      //   //JSON to string, to tabs
+      //   m << file.dump(2);
+      // } else m << "NO";
+      //
+      // s.send(m);
+      // //RESPONSE
+      // s.receive(response);
+      // response >> text;
+      // cout << text << endl;
     } else if (command == "ls") {
       m << "ls";
       s.send(m);
