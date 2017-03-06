@@ -8,9 +8,11 @@ int main() {
 
   context ctx;
   socket s(ctx, socket_type::req);
+  socket b(ctx, socket_type::req);
 
   cout << "Connecting to tcp port 5555\n";
   s.connect("tcp://localhost:5555");
+  b.connect("tcp://localhost:6666");
     system("mkdir downloads");
 
   string name, user, command, text;

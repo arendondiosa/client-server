@@ -1,8 +1,8 @@
-CC	= g++ -std=c++11 -Wall -L/home/arendon/zmq/lib  -I/home/arendon/zmq/include
+CC	= g++ -std=c++11 -Wall
 # CC	= g++ -std=c++11 -Wall -L/home/utp/zmq/lib  -I/home/utp/zmq/include
-LDFLAGS = -lpthread -lzmqpp -lzmq
+LDFLAGS = -lzmqpp -lzmq
 
-all: server client
+all: server client broker
 
 server: server.cc
 	$(CC) -o server.out server.cc $(LDFLAGS)
@@ -10,5 +10,8 @@ server: server.cc
 client: client.cc
 	$(CC) -o client.out client.cc $(LDFLAGS)
 
+broker: broker.cc
+	$(CC) -o broker.out broker.cc $(LDFLAGS)
+
 clean:
-	rm -f client.out server.out
+	rm -f client.out server.out broker.out
