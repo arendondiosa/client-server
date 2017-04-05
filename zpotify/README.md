@@ -27,3 +27,17 @@ pip install hashlib
 ### Broker
 
 ### Client
+
+#### Connecting
+
+```bash
+python client.py <ip> <port>
+```
+
+#### Basic commands
+
+* Closing connection
+
+```bash
+$ exit
+```
