@@ -1,5 +1,5 @@
 #!/usr/bin/python
-import zmq
+
 import random
 import sys
 import time
@@ -7,34 +7,33 @@ import hashlib
 import json
 import string
 
+import fnode
+
 #Node data
-node_id = random.randint(0, 100)
+node_id = ''
 hash_table = {}
 lower_bound = ''  # predecessor's id
 upper_bound = ''  # successor's id
-
-
-def sha256(toHash):
-    return str(hashlib.sha256(str(toHash)).hexdigest())
+ip = ''
 
 
 def get_id():
-    json_data = open('config.json', 'r')
-    d = json.load(json_data)
+    global node_id, ip
 
-    # print(d["nodes"])
+    d = fnode.load_json('config.json')
 
     while True:
         rnd = random.randint(0, 100)
-        rnd_sha = sha256(rnd)
-        print rnd_sha
+        rnd_sha = fnode.sha256(rnd)
+        # print rnd_sha
         # print(json.dump(d))
         if rnd_sha not in d["nodes"] or d["nodes"][rnd_sha] == "off":
-            d["nodes"][rnd_sha] = "on"
-            print rnd_sha
+            d["nodes"][rnd_sha] = {"state": "on", "ip": ip}
+            # print rnd_sha
+            node_id = rnd_sha
             break
         else:
-            print(rnd_sha + "Yes")
+            print("This id exist!")
 
     f = open('config.json', 'w')
     f.write(json.dumps(d, sort_keys=True,
@@ -43,8 +42,12 @@ def get_id():
 
 
 def main():
-    print node_id
+    global ip
+    ip = sys.argv[1]
+
     get_id()
+    print node_id
+    print ip
 
 
 if __name__ == '__main__':
