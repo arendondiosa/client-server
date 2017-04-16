@@ -17,6 +17,7 @@ upper_bound = ''  # successor's id
 ip = ''
 
 
+# Get a random id. Put in config.json id, port
 def get_id():
     global node_id, ip
 
@@ -32,8 +33,8 @@ def get_id():
             # print rnd_sha
             node_id = rnd_sha
             break
-        else:
-            print("This id exist!")
+        # else:
+        #     print("This id exist!")
 
     f = open('config.json', 'w')
     f.write(json.dumps(d, sort_keys=True,
@@ -41,13 +42,38 @@ def get_id():
     f.close()
 
 
+def get_edges():
+    global lower_bound, upper_bound
+    nodes = []
+
+    d = fnode.load_json('config.json')
+
+    for node in d["nodes"]:
+        if d["nodes"][node]["state"] == "on":
+            nodes.append(json.dumps(node))
+
+    nodes = sorted(nodes)
+
+    if len(nodes) == 1:
+        lower_bound = upper_bound = node_id
+        print "hola"
+    else:
+        # for node in range(0, len(nodes)):
+        #     print str(node) + " -> " + nodes[node]
+        #     target = nodes[node]
+        #     if node == 0:
+
+
+
 def main():
     global ip
     ip = sys.argv[1]
 
     get_id()
-    print node_id
-    print ip
+    get_edges()
+    print lower_bound + "   " + upper_bound
+    # print node_id
+    # print ip
 
 
 if __name__ == '__main__':
