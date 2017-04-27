@@ -21,6 +21,8 @@ pip install hashlib
 
 ## Run
 
+### node
+
 ```bash
 python node.py <ip>
 ```
